@@ -1,0 +1,147 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -80
+      ],
+      "id": "9d0cc370-ac3a-4bdb-94ab-31fba9592e13",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "give me a great quote with saying the author of this quote",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        -80
+      ],
+      "id": "0844d992-e67a-4833-a060-a70d7d110fca",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        128
+      ],
+      "id": "04a55e33-be6f-4efe-87a9-7e62ef6191ea",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fb2vx5310JovhXtV",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "post"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        128
+      ],
+      "id": "c71a1aba-4b08-4c24-96c4-13400f754329",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "fromEmail": "ag7981277@gmail.com",
+        "toEmail": "aligaberr20@gmail.com",
+        "subject": "Your daily quote",
+        "emailFormat": "text",
+        "text": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        -80
+      ],
+      "id": "80594bd4-4154-48b5-af3e-2600afd94e01",
+      "name": "Send email",
+      "webhookId": "f74913be-8b21-442e-811c-63b550a0c3b0",
+      "credentials": {
+        "smtp": {
+          "id": "rxcdj6eIBPIzMEaE",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c89e281b-c07b-439c-a130-54b1000fa6b5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e9dd6359c40d7c0cd9a87b959cce288bcf5d64d011b799695500bd34074358b9"
+  },
+  "id": "21VvhHZpEGoZe7fb",
+  "tags": []
+}
